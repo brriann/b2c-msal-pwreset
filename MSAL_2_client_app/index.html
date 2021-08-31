@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>AADB2C + MSAL Bug Demo</title>
+
+  <!-- msal.min.js can be used in the place of msal.js; included msal.js to make debug easy -->
+  <script src="https://alcdn.msauth.net/browser/2.15.0/js/msal-browser.js"
+    integrity="sha384-dFzMiVGB5HpWZ+5w5VSif6jhWfNeplSw9ACYmQKZcY2azuT9kCxVWVI9HyfGdkHV"
+    crossorigin="anonymous"></script>
+
+  <!-- To help ensure reliability, Microsoft provides a second CDN -->
+  <script type="text/javascript">
+    if (typeof Msal === 'undefined') document.write(unescape("%3Cscript src='https://alcdn.msftauth.net/browser/2.15.0/js/msal-browser.js' type='text/javascript' crossorigin='anonymous' %3E%3C/script%3E"));
+  </script>
+</head>
+
+<body>
+    <div>
+        You are logged in:
+    </div>
+    <div id="loggedInDisplay"></div>
+    <div>
+        Your name:
+    </div>
+    <div id="usernameDisplay"></div>
+    <div>
+        <h4>1. create an account using 'sign up now'</h4>
+    </div>
+    <div>
+        <button type="button" id="SignIn" onclick="signIn()">
+            Sign Up / Sign In
+        </button>
+    </div>
+    <br>
+    <div>
+        <h4>2. logout</h4>
+    </div>
+    <div>
+        <button type="button" id="SignIn" onclick="signOut()">
+            Sign Out
+        </button>
+    </div>
+    <br>
+    <div>
+        <h4>3. reset password using 'forgot your password?'</h4>
+    </div>
+    <div>
+        <button type="button" id="SignIn" onclick="signIn()">
+            Sign Up / Sign In
+        </button>
+    </div>
+    <br>
+    <div>
+        <h4>4. edit profile after resetting password.</h4>
+        <h5>BUG: you have to sign in again!</h5>
+    </div>
+    <div>
+        <button type="button" id="SignIn" onclick="editProfile()">
+            Edit Profile
+        </button>
+    </div>
+    <br>
+
+  <!-- importing app scripts (load order is important) -->
+    <script type="text/javascript" src="./settings.js"></script>
+    <script type="text/javascript" src="./authConfig.js"></script>
+    <script type="text/javascript" src="./ui.js"></script>
+    <script type="text/javascript" src="./authRedirect.js"></script>
+</body>
+
+</html>
