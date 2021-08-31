@@ -1,5 +1,21 @@
 # Azure AD B2C Password Reset demo of bug / undefined behavior
 
+## FIX INFORMATION
+
+The below config, added in TrustFrameworkExtensions file, fixed the issue.
+
+```xml
+<TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+    <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+</TechnicalProfile>
+```
+
+See https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-reference-sso
+
+The PasswordReset SubJourney was not interacting with the SM-AAD Technical Profile.
+
+Thanks to the responder on this issue https://github.com/azure-ad-b2c/samples/issues/274
+
 ## SUSPECTED BUG INFORMATION
 
 Please also see
