@@ -4,10 +4,46 @@
 
 The below config, added in TrustFrameworkExtensions file, fixed the issue.
 
+Technical Profile
+
 ```xml
-<TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+<TechnicalProfile Id="SessionManagement">
+    <DisplayName>Session Management Call</DisplayName>
+    <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" />
+    </OutputClaims>
     <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
 </TechnicalProfile>
+```
+
+Update to PasswordReset SubJourney
+
+```xml
+<SubJourney Id="PasswordReset" Type="Call">
+<OrchestrationSteps>
+    <!-- Validate user's email address. -->
+    <OrchestrationStep Order="1" Type="ClaimsExchange">
+        <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
+        </ClaimsExchanges>
+    </OrchestrationStep>
+
+    <!-- Connect to SSO Session provider -->
+    <OrchestrationStep Order="2" Type="ClaimsExchange">
+        <ClaimsExchanges>
+            <ClaimsExchange Id="PasswordResetSessionManagement" TechnicalProfileReferenceId="SessionManagement" />
+        </ClaimsExchanges>
+    </OrchestrationStep>
+
+    <!-- Collect and persist a new password. -->
+    <OrchestrationStep Order="3 " Type="ClaimsExchange">
+        <ClaimsExchanges>
+            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
+        </ClaimsExchanges>
+    </OrchestrationStep>
+</OrchestrationSteps>
+</SubJourney>
 ```
 
 See https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-reference-sso
