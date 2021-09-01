@@ -49,7 +49,12 @@
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
+        <TechnicalProfile Id="SessionManagement">
+          <DisplayName>Session Management Call</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+          </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
         <TechnicalProfile Id="ForgotPassword">
@@ -130,9 +135,16 @@
               <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
             </ClaimsExchanges>
           </OrchestrationStep>
+
+          <!-- Connect to SSO Session provider -->
+          <OrchestrationStep Order="2" Type="ClaimsExchange">
+            <ClaimsExchanges>
+              <ClaimsExchange Id="PasswordResetSessionManagement" TechnicalProfileReferenceId="SessionManagement" />
+            </ClaimsExchanges>
+          </OrchestrationStep>
     
           <!-- Collect and persist a new password. -->
-          <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <OrchestrationStep Order="3 " Type="ClaimsExchange">
             <ClaimsExchanges>
               <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
             </ClaimsExchanges>
